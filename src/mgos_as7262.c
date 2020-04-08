@@ -35,14 +35,14 @@ static void mgos_as7262_i2c_write(struct mgos_as7262 *d, uint8_t reg, uint8_t va
 
 uint8_t mgos_as7262_virtual_read(struct mgos_as7262 *d, uint8_t reg) {
   uint8_t status, val;
-  status = 0xFF;
-  while (0 != (status & 0x02)) {
-    status = mgos_as7262_i2c_read(d, reg);
+  while (1) {
+    status = mgos_as7262_i2c_read(d, MGOS_AS7262_REG_STATUS);
+    if ((status & 0x02) == 0) break;
   }
   mgos_as7262_i2c_write(d, MGOS_AS7262_REG_WRITE, reg);
-  status = 0xFF;
-  while (0 == (status & 0x01)) {
-    status = mgos_as7262_i2c_read(d, reg);
+  while (1) {
+    status = mgos_as7262_i2c_read(d, MGOS_AS7262_REG_STATUS);
+    if ((status & 0x01) != 0) break;
   }
   val = mgos_as7262_i2c_read(d, MGOS_AS7262_REG_READ);
   return val;
@@ -50,14 +50,14 @@ uint8_t mgos_as7262_virtual_read(struct mgos_as7262 *d, uint8_t reg) {
 
 void mgos_as7262_virtual_write(struct mgos_as7262 *d, uint8_t reg, uint8_t val) {
   uint8_t status;
-  status = 0xFF;
-  while (0 != (status & 0x02)) {
-    status = mgos_as7262_i2c_read(d, reg);
+  while (1) {
+    status = mgos_as7262_i2c_read(d, MGOS_AS7262_REG_STATUS);
+    if ((status & 0x02) == 0) break;
   }
   mgos_as7262_i2c_write(d, MGOS_AS7262_REG_WRITE, reg | 0x80);
-  status = 0xFF;
-  while (0 == (status & 0x01)) {
-    status = mgos_as7262_i2c_read(d, reg);
+  while (1) {
+    status = mgos_as7262_i2c_read(d, MGOS_AS7262_REG_STATUS);
+    if ((status & 0x02) == 0) break;
   }
   mgos_as7262_i2c_write(d, MGOS_AS7262_REG_WRITE, val);
   return;
