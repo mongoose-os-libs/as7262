@@ -1,4 +1,4 @@
-# Mongoose OS driver for ADE7953
+# Mongoose OS driver for AS7262
 
 This is a driver for AMS [AS7262](docs/AS7262_DS000486_2-00.pdf).
 
