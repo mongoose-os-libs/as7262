@@ -90,6 +90,7 @@ bool mgos_as7262_get_integration_time(struct mgos_as7262 *d, uint8_t *t);
 //
 // Returns false upon error, true otherwise.
 bool mgos_as7262_get_channel(struct mgos_as7262 *d, const enum mgos_as7262_chan chan, float *value);
+bool mgos_as7262_get_channel_raw(struct mgos_as7262 *d, const enum mgos_as7262_chan chan, uint16_t *value);
 
 // Clean up the driver and return memory used for it.
 //

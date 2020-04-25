@@ -209,6 +209,16 @@ bool mgos_as7262_get_channel(struct mgos_as7262 *d, const enum mgos_as7262_chan 
   return true;
 }
 
+bool mgos_as7262_get_channel_raw(struct mgos_as7262 *d, const enum mgos_as7262_chan chan, uint16_t *value) {
+  if (!d || !value || chan < 0 || chan > CHAN_RED) return false;
+  uint16_t val;
+
+  val = ((uint16_t) mgos_as7262_virtual_read(d, MGOS_AS7262_VREG_RAW_CHAN + chan * 2)) << 8;
+  val |= mgos_as7262_virtual_read(d, MGOS_AS7262_VREG_RAW_CHAN + chan * 2 + 1);
+  *value = ntohs(val);
+  return true;
+}
+
 bool mgos_as7262_destroy(struct mgos_as7262 **dev) {
   if (!*dev) return false;
   free(*dev);
